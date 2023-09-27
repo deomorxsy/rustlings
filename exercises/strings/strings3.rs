@@ -5,14 +5,27 @@
 
 // I AM NOT DONE
 
+#[derive(Debug)]
 fn trim_me(input: &str) -> String {
     // TODO: Remove whitespace from both ends of a string!
-    ???
+    let start_index = input.to_string().chars().any(|j| !j.is_whitespace()).unwrap_or(0);
+    let trimmed_start = &input[start_index..];
+
+    let bytado = input.as_bytes();
+    let end_index = bytado.iter().rposition(|index| !index.is_whitespace()).map(|position| position+1).unwrap_or(0);
+    let trimmed_end = &input[..end_index];
+
+    println!("bytado = {:#?}", bytado);
+
+    return trimmed_start + trimed_end;
+
 }
 
 fn compose_me(input: &str) -> String {
     // TODO: Add " world!" to the string! There's multiple ways to do this!
-    ???
+    let refstr = input.to_string();
+    let addstr = " world!";
+    return format!("{}{}", refstr, addstr);
 }
 
 fn replace_me(input: &str) -> String {
