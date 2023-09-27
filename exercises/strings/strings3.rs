@@ -3,22 +3,33 @@
 // Execute `rustlings hint strings3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
-#[derive(Debug)]
+//#[derive(Debug)]
 fn trim_me(input: &str) -> String {
     // TODO: Remove whitespace from both ends of a string!
-    let start_index = input.to_string().chars().any(|j| !j.is_whitespace()).unwrap_or(0);
-    let trimmed_start = &input[start_index..];
+    let firstValue = input.to_string();
+    let mut fv_char = firstValue.chars();
+    // if the left end starts with whitespace, find the end of the whitespace
+    let fv_pos = fv_char.position(|j| !j.is_whitespace());
+    let start_index =  fv_pos.unwrap_or(0);
 
-    let bytado = input.as_bytes();
-    let end_index = bytado.iter().rposition(|index| !index.is_whitespace()).map(|position| position+1).unwrap_or(0);
-    let trimmed_end = &input[..end_index];
 
-    println!("bytado = {:#?}", bytado);
+    // rposition requires a reversible iterator. It also needs a exact-size iterator,
+    // so it is possible to assign indices the same way as position.
+    // A exact-size iterator implements the std::iter::ExactSizeIterator trait,
+    // but since not every iterator knows ahead of time how many items it will produce
+    // (like .chars() which is used in the fv_char variable, which does not know AOT),
+    // it cant be used on strings. Hence a byte array iterator is used instead, which
+    // implements ExactSizeIterator.
+    // And hence, is_ascii_whitespace is needed.
+    let fv_bytado =  input.as_bytes();
+    let fv_rev_pos = fv_bytado.iter().rposition(|j| !j.is_ascii_whitespace());
 
-    return trimmed_start + trimed_end;
+    // last index
+    let end_index = fv_rev_pos.unwrap_or(0);
+    // slice the string with the two indexes and remove whitespace. +1 ftw
+    let final_trimado = &input[start_index..end_index+1];
 
+    return final_trimado.to_string();
 }
 
 fn compose_me(input: &str) -> String {
@@ -30,7 +41,14 @@ fn compose_me(input: &str) -> String {
 
 fn replace_me(input: &str) -> String {
     // TODO: Replace "cars" in the string with "balloons"!
-    ???
+    let inp_char = input.to_string();
+    //repl_char.replace("cars", "balloons");
+    if inp_char.contains("cars") {
+        let replaced = inp_char.replace("cars", "balloons");
+        return replaced;
+    } else {
+        return inp_char;
+    }
 }
 
 #[cfg(test)]
